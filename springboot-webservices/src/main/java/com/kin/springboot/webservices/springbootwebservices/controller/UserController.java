@@ -6,6 +6,7 @@ import com.kin.springboot.webservices.springbootwebservices.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,18 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public User createUser(@RequestBody User user){
+    public User createUser(@Valid @RequestBody User user){
         User savedUser = service.save(user);
         return savedUser;
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void removeUser(@PathVariable Long id){
+        Optional<User> user = service.findById(id);
+        if(user.isPresent()){
+            service.deleteById(id);
+            return;
+        }
+        throw new UserNotFoundException("id:"+id);
     }
 }
