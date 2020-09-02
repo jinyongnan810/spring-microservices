@@ -7,9 +7,12 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 @ApiModel("User infos")
 public class User {
@@ -24,6 +27,8 @@ public class User {
     private Date birthDate;
     @JsonIgnore// to hide password in response
     private String password;
+    @OneToMany(mappedBy = "user")
+    private List<Post>posts;
 
     protected User(){}
 
@@ -47,6 +52,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
     }
 
     @Override
