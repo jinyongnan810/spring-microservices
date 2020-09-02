@@ -1,5 +1,6 @@
 package com.kin.springboot.webservices.springbootwebservices.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,12 +22,15 @@ public class User {
     @ApiModelProperty(notes = "Date should be a pasted date.")
     @Past(message = "Date should be a pasted date.")
     private Date birthDate;
+    @JsonIgnore// to hide password in response
+    private String password;
 
     protected User(){}
 
-    public User(String name, Date birthDate) {
+    public User(@Size(min = 2, message = "Name should be longer than 2 characters.") String name, @Past(message = "Date should be a pasted date.") Date birthDate, String password) {
         this.name = name;
         this.birthDate = birthDate;
+        this.password = password;
     }
 
     public long getId() {
@@ -39,6 +43,10 @@ public class User {
 
     public Date getBirthDate() {
         return birthDate;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     @Override
