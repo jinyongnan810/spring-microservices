@@ -2,6 +2,8 @@ package com.kin.springcloud.currencyconversionservice.controller;
 
 import com.kin.springcloud.currencyconversionservice.bean.CurrencyConversionResult;
 import com.kin.springcloud.currencyconversionservice.proxy.CurrencyExchangeServiceProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import java.util.HashMap;
 
 @RestController
 public class CurrencyConversionController {
+    // create logger
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private CurrencyExchangeServiceProxy proxy;
     @GetMapping("/currency-conversion-lagacy/from/{from}/to/{to}/quantity/{quantity}")
@@ -34,6 +38,7 @@ public class CurrencyConversionController {
     public CurrencyConversionResult convert(@PathVariable String from, @PathVariable String to, @PathVariable BigDecimal quantity){
         // usage of feign
         CurrencyConversionResult res = proxy.exchange(from, to);
+        logger.info("{}",res);
         return new CurrencyConversionResult(res.getId(),from,to,res.getRate(),quantity,quantity.multiply(res.getRate()),res.getPort());
     }
 }

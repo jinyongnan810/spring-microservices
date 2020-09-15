@@ -2,6 +2,8 @@ package com.kin.springcloud.currencyexchangeservice.controller;
 
 import com.kin.springcloud.currencyexchangeservice.beans.ExchangeValue;
 import com.kin.springcloud.currencyexchangeservice.service.ExchangeValueRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,8 @@ import java.util.Optional;
 
 @RestController
 public class CurrencyExchangeController {
+    // create logger
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private ExchangeValueRepository exchangeValueRepository;
     @Autowired
@@ -23,6 +27,7 @@ public class CurrencyExchangeController {
         if(resOpt.isPresent()){
             ExchangeValue res = resOpt.get();
             res.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
+            logger.info("{}",res);
             return res;
         }
         ExchangeValue res = new ExchangeValue(0L, from, to, BigDecimal.valueOf(0));
